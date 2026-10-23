@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Solange — a fiscal política | Entre na lista</title>
+<title>Solange — a fiscal política | Acesso antecipado</title>
 <meta name="description" content="Você votou. A Solange vigia. Acompanhe como seus políticos votam, quanto gastam e o que andam fazendo — com dados oficiais, em linguagem de gente.">
 <meta property="og:title" content="Solange — a fiscal política">
-<meta property="og:description" content="Você votou. A Solange vigia. Entre na lista de pré-cadastro.">
+<meta property="og:description" content="Você votou. A Solange vigia. Receba acesso antecipado.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#FF2D87">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -38,10 +38,12 @@ header .btn{min-height:42px;padding:0 18px;font-size:15px}
 /* hero */
 .hero{background:var(--pink);padding:40px 0 80px;border-bottom:3px solid var(--ink)}
 .hero .wrap{display:grid;gap:40px;align-items:center}
-@media(min-width:900px){.hero .wrap{grid-template-columns:1.15fr .85fr}.hero{padding:72px 0 96px}}
-.hero h1{font-size:clamp(56px,13vw,124px)}
+@media(min-width:900px){.hero .wrap{grid-template-columns:minmax(0,1fr) 400px;gap:56px}.hero{padding:72px 0 96px}}
+.hero h1{font-size:clamp(34px,5.4vw,76px)}.hero h1 span,.hero h1 em{white-space:nowrap}
+@media(max-width:600px){.hero h1{font-size:9.4vw}}
+@media(max-width:899px){.desk{display:none!important}.hero{padding:24px 0 40px}.hero .wrap{gap:28px}.dossie{padding:16px 18px;box-shadow:6px 6px 0 var(--ink)}.dossie .row:nth-of-type(n+5){display:none}.who{margin:4px 0 8px}.ava{width:46px;height:46px;font-size:18px}.row{padding:8px 0}}
 .hero h1 em{font-style:normal;display:block;color:#fff;-webkit-text-stroke:3px var(--ink);paint-order:stroke fill}
-.hero p.lead{font-size:clamp(19px,2.4vw,23px);max-width:34ch;margin:22px 0 28px;font-weight:700}
+.hero p.lead{font-size:clamp(17px,2.2vw,22px);max-width:36ch;margin:16px 0 20px;font-weight:700}
 .hero .ctas{display:flex;flex-wrap:wrap;gap:12px}
 .count{margin-top:18px;font-weight:700;font-size:15px}
 /* dossier */
@@ -72,8 +74,8 @@ header .btn{min-height:42px;padding:0 18px;font-size:15px}
 .track{background:var(--ink);color:#fff}
 .track h2 span{color:var(--pink)}
 .list{margin-top:36px;display:grid;gap:0}
-.item{display:flex;gap:18px;align-items:baseline;padding:20px 0;border-top:1px solid #3a2a33}
-.item b{font:400 clamp(26px,4vw,40px)/1 "Archivo Black";color:var(--pink);min-width:5.5ch}
+.item{display:grid;gap:6px;padding:20px 0;border-top:1px solid #3a2a33}
+.item b{font:400 clamp(26px,4vw,40px)/1 "Archivo Black";color:var(--pink)}
 .item p{color:#e9d9e1;max-width:56ch}
 @media(min-width:900px){.list{grid-template-columns:1fr 1fr;column-gap:48px}}
 /* report */
@@ -126,7 +128,7 @@ footer .logo{color:#fff;margin-bottom:10px}
 <header>
   <div class="wrap">
     <a class="logo" href="#" aria-label="Solange, início"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="28" cy="28" r="15" fill="#fff" stroke="#140A10" stroke-width="6"/><path d="M39 39l13 13" stroke="#140A10" stroke-width="8" stroke-linecap="round"/></svg>Solange</a>
-    <a class="btn" href="#lista">Quero entrar</a>
+    <a class="btn" href="#lista">Acesso antecipado</a>
   </div>
 </header>
 
@@ -134,11 +136,11 @@ footer .logo{color:#fff;margin-bottom:10px}
 <section class="hero">
   <div class="wrap">
     <div>
-      <h1>Você votou.<em>A Solange vigia.</em></h1>
-      <p class="lead">Ela é a fiscal política que acompanha seus políticos por você: como votam, quanto gastam e o que andam aprontando. Tudo com dados oficiais, explicado sem juridiquês.</p>
+      <h1><span>Você votou.</span><em>A Solange vigia.</em></h1>
+      <p class="lead">A fiscal política que mostra como seus políticos votam, quanto gastam e o que andam aprontando. Com dados oficiais e sem juridiquês.</p>
       <div class="ctas">
-        <a class="btn" href="#lista">Entrar na lista VIP</a>
-        <a class="btn alt" href="#como">Como funciona</a>
+        <a class="btn" href="#lista">Quero acesso antecipado</a>
+        <a class="btn alt desk" href="#como">Como funciona</a>
       </div>
       <p class="count" id="count" aria-live="polite"></p>
     </div>
@@ -220,7 +222,7 @@ footer .logo{color:#fff;margin-bottom:10px}
 <section id="faq">
   <div class="wrap">
     <h2>Perguntas rápidas.</h2>
-    <details><summary>Quanto custa?</summary><p>Quem entra na lista de pré-cadastro tem acesso antecipado e gratuito ao lançamento.</p></details>
+    <details><summary>Quanto custa?</summary><p>Quem se cadastra agora recebe acesso antecipado e gratuito antes do lançamento oficial.</p></details>
     <details><summary>A Solange é de esquerda ou de direita?</summary><p>Nenhum dos dois. Ela fiscaliza todo mundo do mesmo jeito, com os mesmos dados oficiais. Político bom ou ruim, quem julga é você.</p></details>
     <details><summary>De onde vêm os dados?</summary><p>Das bases públicas da Câmara, do Senado, do STF, do TSE e do Portal da Transparência. Toda informação vem com o link da fonte.</p></details>
     <details><summary>Quais políticos dá pra acompanhar?</summary><p>No lançamento, deputados federais e senadores. Depois vêm governadores, deputados estaduais, prefeitos e vereadores.</p></details>
@@ -232,18 +234,16 @@ footer .logo{color:#fff;margin-bottom:10px}
 <section class="join" id="lista">
   <div class="wrap">
     <div>
-      <h2>Entra pra turma da fiscalização.</h2>
-      <p class="big">Seja dos primeiros a usar a Solange. Deixa seu e-mail e a gente te chama no lançamento.</p>
+      <h2>Receba acesso antecipado.</h2>
+      <p class="big">Seja dos primeiros a usar a Solange. Deixa seu e-mail e a gente te avisa assim que abrir.</p>
     </div>
     <form id="form" novalidate>
-      <label>Seu nome<input name="name" autocomplete="name" placeholder="Maria Souza…" required maxlength="120"></label>
       <label>Seu e-mail<input name="email" type="email" inputmode="email" autocomplete="email" spellcheck="false" placeholder="maria@email.com…" required maxlength="200"></label>
       <label>Seu estado <small>(opcional)</small>
         <select name="uf" autocomplete="off"><option value="">Escolha…</option></select>
       </label>
-      <label>Quem você quer vigiar? <small>(opcional)</small><textarea name="politicians" autocomplete="off" placeholder="Ex.: o deputado em quem votei, a senadora do meu estado…" maxlength="500"></textarea></label>
       <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <button class="btn" type="submit">Quero a Solange de olho 🔎</button>
+      <button class="btn" type="submit">Quero acesso antecipado</button>
       <p id="msg" aria-live="polite"></p>
       <p class="fine">Usamos seus dados só para falar da Solange. Nada de spam, nada de venda de dados.</p>
     </form>
@@ -265,13 +265,13 @@ fetch("/api/count").then(r=>r.json()).then(d=>{if(d.count>=20)document.getElemen
 const f=document.getElementById("form"),msg=document.getElementById("msg");
 f.addEventListener("submit",async e=>{
   e.preventDefault();msg.className="";msg.textContent="";
-  for(const el of [f.name,f.email]) if(!el.checkValidity()){msg.className="err";msg.textContent=el===f.email?"Esse e-mail parece estranho. Confere?":"Coloca seu nome aí.";el.focus();return}
+  for(const el of [f.email]) if(!el.checkValidity()){msg.className="err";msg.textContent="Esse e-mail parece estranho. Confere?";el.focus();return}
   const b=f.querySelector("button");b.disabled=true;b.textContent="Enviando…";
   try{
     const r=await fetch("/api/signup",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.fromEntries(new FormData(f)))});
     const d=await r.json();if(!r.ok)throw new Error(d.error);
-    f.innerHTML='<div class="done"><h3>Tá dentro! 🔎</h3><p>A Solange anotou. Fica de olho no seu e-mail: a gente te chama no lançamento.</p></div>';
-  }catch(err){msg.className="err";msg.textContent=err.message||"Deu ruim. Tenta de novo?";b.disabled=false;b.textContent="Quero a Solange de olho 🔎"}
+    f.innerHTML='<div class="done"><h3>Tá dentro! 🔎</h3><p>A Solange anotou. Você vai receber o acesso antecipado no seu e-mail.</p></div>';
+  }catch(err){msg.className="err";msg.textContent=err.message||"Deu ruim. Tenta de novo?";b.disabled=false;b.textContent="Quero acesso antecipado"}
 });
 </script>
 </body>

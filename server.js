@@ -11,8 +11,9 @@ const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 
 async function init() {
   if (!pool) return console.warn('DATABASE_URL ausente: cadastros não serão salvos');
   await pool.query(`CREATE TABLE IF NOT EXISTS signups (
-    id serial PRIMARY KEY, name text NOT NULL, email text UNIQUE NOT NULL, uf text, politicians text,
+    id serial PRIMARY KEY, name text, email text UNIQUE NOT NULL, uf text, politicians text,
     created_at timestamptz DEFAULT now())`);
+  await pool.query('ALTER TABLE signups ALTER COLUMN name DROP NOT NULL');
 }
 
 function send(res, code, body, type = 'application/json') {
@@ -30,11 +31,11 @@ http.createServer(async (req, res) => {
       const d = JSON.parse(raw || '{}');
       const name = String(d.name || '').trim().slice(0, 120), email = String(d.email || '').trim().toLowerCase().slice(0, 200);
       if (d.website) return send(res, 200, { ok: true }); // honeypot
-      if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return send(res, 400, { error: 'Confere seu nome e e-mail.' });
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return send(res, 400, { error: 'Confere seu e-mail.' });
       if (!pool) { mem.set(email, { id: mem.size + 1, name, email, uf: d.uf || null, politicians: d.politicians || null, created_at: new Date() }); fs.writeFileSync(FILE, JSON.stringify([...mem.values()])); return send(res, 200, { ok: true }); }
       await pool.query(`INSERT INTO signups (name,email,uf,politicians) VALUES ($1,$2,$3,$4)
         ON CONFLICT (email) DO UPDATE SET name=EXCLUDED.name, uf=EXCLUDED.uf, politicians=EXCLUDED.politicians`,
-        [name, email, String(d.uf || '').slice(0, 2) || null, String(d.politicians || '').trim().slice(0, 500) || null]);
+        [name || null, email, String(d.uf || '').slice(0, 2) || null, String(d.politicians || '').trim().slice(0, 500) || null]);
       return send(res, 200, { ok: true });
     }
     if (url.pathname === '/api/count') {
