@@ -235,13 +235,11 @@ footer .logo{color:#fff;margin-bottom:10px}
   <div class="wrap">
     <div>
       <h2>Receba acesso antecipado.</h2>
-      <p class="big">Seja dos primeiros a usar a Solange. Deixa seu e-mail e a gente te avisa assim que abrir.</p>
+      <p class="big">Seja dos primeiros a usar a Solange. Deixa seu e-mail e WhatsApp e a gente te avisa assim que abrir.</p>
     </div>
     <form id="form" novalidate>
       <label>Seu e-mail<input name="email" type="email" inputmode="email" autocomplete="email" spellcheck="false" placeholder="maria@email.com…" required maxlength="200"></label>
-      <label>Seu estado <small>(opcional)</small>
-        <select name="uf" autocomplete="off"><option value="">Escolha…</option></select>
-      </label>
+      <label>Seu WhatsApp<input name="phone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="(11) 91234-5678…" required minlength="14" maxlength="15"></label>
       <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
       <button class="btn" type="submit">Quero acesso antecipado</button>
       <p id="msg" aria-live="polite"></p>
@@ -259,13 +257,12 @@ footer .logo{color:#fff;margin-bottom:10px}
 </footer>
 
 <script>
-const UFS="AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PR PE PI RJ RN RS RO RR SC SP SE TO".split(" ");
-const sel=document.querySelector("select[name=uf]");UFS.forEach(u=>sel.add(new Option(u,u)));
+const ph=document.querySelector("input[name=phone]");ph.addEventListener("input",()=>{const d=ph.value.replace(/\D/g,"").slice(0,11);ph.value=d.length>10?`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`:d.length>6?`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`:d.length>2?`(${d.slice(0,2)}) ${d.slice(2)}`:d.length?`(${d}`:""});
 fetch("/api/count").then(r=>r.json()).then(d=>{if(d.count>=20)document.getElementById("count").textContent=d.count.toLocaleString("pt-BR")+" pessoas já estão na lista."}).catch(()=>{});
 const f=document.getElementById("form"),msg=document.getElementById("msg");
 f.addEventListener("submit",async e=>{
   e.preventDefault();msg.className="";msg.textContent="";
-  for(const el of [f.email]) if(!el.checkValidity()){msg.className="err";msg.textContent="Esse e-mail parece estranho. Confere?";el.focus();return}
+  for(const el of [f.email,f.phone]) if(!el.checkValidity()){msg.className="err";msg.textContent=el===f.email?"Esse e-mail parece estranho. Confere?":"Coloca seu WhatsApp com DDD: (11) 91234-5678.";el.focus();return}
   const b=f.querySelector("button");b.disabled=true;b.textContent="Enviando…";
   try{
     const r=await fetch("/api/signup",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.fromEntries(new FormData(f)))});

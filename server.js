@@ -14,6 +14,7 @@ async function init() {
     id serial PRIMARY KEY, name text, email text UNIQUE NOT NULL, uf text, politicians text,
     created_at timestamptz DEFAULT now())`);
   await pool.query('ALTER TABLE signups ALTER COLUMN name DROP NOT NULL');
+  await pool.query('ALTER TABLE signups ADD COLUMN IF NOT EXISTS phone text');
 }
 
 function send(res, code, body, type = 'application/json') {
@@ -31,11 +32,13 @@ http.createServer(async (req, res) => {
       const d = JSON.parse(raw || '{}');
       const name = String(d.name || '').trim().slice(0, 120), email = String(d.email || '').trim().toLowerCase().slice(0, 200);
       if (d.website) return send(res, 200, { ok: true }); // honeypot
+      const phone = String(d.phone || '').replace(/\D/g, '');
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return send(res, 400, { error: 'Confere seu e-mail.' });
-      if (!pool) { mem.set(email, { id: mem.size + 1, name, email, uf: d.uf || null, politicians: d.politicians || null, created_at: new Date() }); fs.writeFileSync(FILE, JSON.stringify([...mem.values()])); return send(res, 200, { ok: true }); }
-      await pool.query(`INSERT INTO signups (name,email,uf,politicians) VALUES ($1,$2,$3,$4)
-        ON CONFLICT (email) DO UPDATE SET name=EXCLUDED.name, uf=EXCLUDED.uf, politicians=EXCLUDED.politicians`,
-        [name || null, email, String(d.uf || '').slice(0, 2) || null, String(d.politicians || '').trim().slice(0, 500) || null]);
+      if (!/^\d{10,11}$/.test(phone)) return send(res, 400, { error: 'Confere seu WhatsApp com DDD.' });
+      if (!pool) { mem.set(email, { id: mem.size + 1, name, email, phone, created_at: new Date() }); fs.writeFileSync(FILE, JSON.stringify([...mem.values()])); return send(res, 200, { ok: true }); }
+      await pool.query(`INSERT INTO signups (name,email,phone) VALUES ($1,$2,$3)
+        ON CONFLICT (email) DO UPDATE SET phone=EXCLUDED.phone`,
+        [name || null, email, phone]);
       return send(res, 200, { ok: true });
     }
     if (url.pathname === '/api/count') {
@@ -47,9 +50,9 @@ http.createServer(async (req, res) => {
       const { rows } = pool ? await pool.query('SELECT * FROM signups ORDER BY created_at DESC') : { rows: [...mem.values()].reverse() };
       if (url.pathname === '/admin.csv') {
         const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
-        return send(res, 200, ['id,nome,email,uf,politicos,criado_em', ...rows.map(r => [r.id, r.name, r.email, r.uf, r.politicians, r.created_at.toISOString()].map(q).join(','))].join('\n'), 'text/csv; charset=utf-8');
+        return send(res, 200, ['id,email,whatsapp,criado_em', ...rows.map(r => [r.id, r.email, r.phone, r.created_at.toISOString()].map(q).join(','))].join('\n'), 'text/csv; charset=utf-8');
       }
-      return send(res, 200, `<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width"><title>Cadastros</title><style>body{font:14px system-ui;padding:16px}td,th{border-bottom:1px solid #ddd;padding:6px;text-align:left}</style><h1>${rows.length} pré-cadastros</h1><p><a href="/admin.csv?key=${encodeURIComponent(url.searchParams.get('key'))}">Baixar CSV</a></p><table><tr><th>Nome<th>E-mail<th>UF<th>Políticos<th>Quando</tr>${rows.map(r => `<tr><td>${esc(r.name)}<td>${esc(r.email)}<td>${esc(r.uf)}<td>${esc(r.politicians)}<td>${r.created_at.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}</tr>`).join('')}</table>`, 'text/html; charset=utf-8');
+      return send(res, 200, `<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width"><title>Cadastros</title><style>body{font:14px system-ui;padding:16px}td,th{border-bottom:1px solid #ddd;padding:6px;text-align:left}</style><h1>${rows.length} pré-cadastros</h1><p><a href="/admin.csv?key=${encodeURIComponent(url.searchParams.get('key'))}">Baixar CSV</a></p><table><tr><th>E-mail<th>WhatsApp<th>Quando</tr>${rows.map(r => `<tr><td>${esc(r.email)}<td>${esc(r.phone)}<td>${r.created_at.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}</tr>`).join('')}</table>`, 'text/html; charset=utf-8');
     }
     if (url.pathname === '/healthz') return send(res, 200, 'ok', 'text/plain');
     let p = path.normalize(path.join(PUB, url.pathname === '/' ? 'index.html' : url.pathname));
