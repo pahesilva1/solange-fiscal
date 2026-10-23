@@ -1,8 +1,9 @@
-const crypto = require('crypto'); const { all } = require('./_store');
+const crypto = require('crypto'); const { all, key, del } = require('./_store');
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 module.exports = async (req, res) => {
   const K = process.env.ADMIN_KEY || '', k = String(req.query.key || '');
   if (!K || k.length !== K.length || !crypto.timingSafeEqual(Buffer.from(k), Buffer.from(K))) return res.status(401).send('não autorizado');
+  if (req.query.del) { await del(key(String(req.query.del).trim().toLowerCase()), { access: 'private' }).catch(() => {}); return res.json({ ok: true }); }
   const rows = await all();
   res.setHeader('Cache-Control', 'no-store');
   if (req.query.csv) {
