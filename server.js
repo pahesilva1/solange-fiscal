@@ -2,6 +2,9 @@ const http = require('http'), fs = require('fs'), path = require('path'), crypto
 const { Pool } = require('pg');
 const pool = process.env.DATABASE_URL ? new Pool({ connectionString: process.env.DATABASE_URL, ssl: process.env.DATABASE_URL.includes('render.com') ? { rejectUnauthorized: false } : false }) : null;
 const ADMIN_KEY = process.env.ADMIN_KEY || '';
+// Sem DATABASE_URL: guarda em arquivo local (efêmero no Render free) só até o banco ser conectado.
+const FILE = path.join(__dirname, 'signups.json');
+const mem = new Map((fs.existsSync(FILE) ? JSON.parse(fs.readFileSync(FILE)) : []).map(r => [r.email, { ...r, created_at: new Date(r.created_at) }]));
 const PUB = path.join(__dirname, 'public');
 const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon' };
 
@@ -28,19 +31,19 @@ http.createServer(async (req, res) => {
       const name = String(d.name || '').trim().slice(0, 120), email = String(d.email || '').trim().toLowerCase().slice(0, 200);
       if (d.website) return send(res, 200, { ok: true }); // honeypot
       if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return send(res, 400, { error: 'Confere seu nome e e-mail.' });
-      if (!pool) return send(res, 503, { error: 'Cadastro indisponível agora.' });
+      if (!pool) { mem.set(email, { id: mem.size + 1, name, email, uf: d.uf || null, politicians: d.politicians || null, created_at: new Date() }); fs.writeFileSync(FILE, JSON.stringify([...mem.values()])); return send(res, 200, { ok: true }); }
       await pool.query(`INSERT INTO signups (name,email,uf,politicians) VALUES ($1,$2,$3,$4)
         ON CONFLICT (email) DO UPDATE SET name=EXCLUDED.name, uf=EXCLUDED.uf, politicians=EXCLUDED.politicians`,
         [name, email, String(d.uf || '').slice(0, 2) || null, String(d.politicians || '').trim().slice(0, 500) || null]);
       return send(res, 200, { ok: true });
     }
     if (url.pathname === '/api/count') {
-      const r = pool ? await pool.query('SELECT count(*)::int n FROM signups') : { rows: [{ n: 0 }] };
+      const r = pool ? await pool.query('SELECT count(*)::int n FROM signups') : { rows: [{ n: mem.size }] };
       return send(res, 200, { count: r.rows[0].n });
     }
     if (url.pathname === '/admin' || url.pathname === '/admin.csv') {
       if (!okKey(url.searchParams.get('key'))) return send(res, 401, 'não autorizado', 'text/plain');
-      const { rows } = await pool.query('SELECT * FROM signups ORDER BY created_at DESC');
+      const { rows } = pool ? await pool.query('SELECT * FROM signups ORDER BY created_at DESC') : { rows: [...mem.values()].reverse() };
       if (url.pathname === '/admin.csv') {
         const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
         return send(res, 200, ['id,nome,email,uf,politicos,criado_em', ...rows.map(r => [r.id, r.name, r.email, r.uf, r.politicians, r.created_at.toISOString()].map(q).join(','))].join('\n'), 'text/csv; charset=utf-8');
