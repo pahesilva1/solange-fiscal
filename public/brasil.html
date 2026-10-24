@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Solange — a fiscal política | Acesso antecipado</title>
+<meta name="description" content="Você votou. A Solange vigia. Acompanhe como seus políticos votam, quanto gastam e o que andam fazendo — com dados oficiais, em linguagem de gente.">
+<meta property="og:title" content="Solange — a fiscal política">
+<meta property="og:description" content="Você votou. A Solange vigia. Receba acesso antecipado.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1FA35C">
+<link rel="canonical" href="https://solange-fiscal.vercel.app/">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon-brasil.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Archivo+Black&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#FFD100;--green:#1FA35C;--pink-2:#DDF3E3;--ink:#0B1F4D;--paper:#F7F9FC;--muted:#3A4A6B;--ok:#0E9F6E;--bad:#E0243A}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{font:500 17px/1.5 Archivo,system-ui,sans-serif;color:var(--ink);background:var(--paper);touch-action:manipulation;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:#fff;padding:8px 12px;z-index:9}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:"Archivo Black",Archivo,sans-serif;font-weight:400;line-height:.95;letter-spacing:-.02em;text-wrap:balance}
+h2{font-size:clamp(36px,7vw,72px)}
+section{padding:72px 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 26px;border-radius:999px;border:3px solid var(--ink);background:var(--ink);color:#fff;font:900 17px Archivo,sans-serif;text-decoration:none;cursor:pointer;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn.alt{background:transparent;color:var(--ink)}
+/* header */
+header{position:sticky;top:0;z-index:5;background:var(--green);border-bottom:3px solid var(--ink);padding-top:env(safe-area-inset-top)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:8px;font:400 22px "Archivo Black",sans-serif;text-decoration:none}
+.logo svg{width:30px;height:30px}
+header .btn{min-height:42px;padding:0 18px;font-size:15px}
+/* hero */
+.hero{background:var(--green);padding:40px 0 80px;border-bottom:3px solid var(--ink)}
+.hero .wrap{display:grid;gap:40px;align-items:center}
+@media(min-width:900px){.hero .wrap{grid-template-columns:minmax(0,1fr) 400px;gap:56px}.hero{padding:72px 0 96px}}
+.hero h1{font-size:clamp(34px,5.4vw,76px)}.hero h1 span,.hero h1 em{white-space:nowrap}
+@media(max-width:600px){.hero h1{font-size:9.4vw}}
+@media(max-width:899px){.desk{display:none!important}.hero{padding:24px 0 40px}.hero .wrap{gap:28px}.dossie{padding:16px 18px;box-shadow:6px 6px 0 var(--ink)}.dossie .row:nth-of-type(n+5){display:none}.who{margin:4px 0 8px}.ava{width:46px;height:46px;font-size:18px}.row{padding:8px 0}}
+.hero h1 em{font-style:normal;display:block;color:#fff;-webkit-text-stroke:3px var(--ink);paint-order:stroke fill}
+.hero p.lead{font-size:clamp(17px,2.2vw,22px);max-width:36ch;margin:16px 0 20px;font-weight:700}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px}
+.count{margin-top:18px;font-weight:700;font-size:15px}
+/* dossier */
+.dossie{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:22px;box-shadow:10px 10px 0 var(--ink);transform:rotate(1.5deg);max-width:440px;justify-self:center;width:100%}
+.dossie .tab{position:absolute;top:-17px;left:22px;background:var(--ink);color:#fff;font:900 12px Archivo;letter-spacing:.12em;padding:6px 12px;border-radius:8px 8px 0 0}
+.stamp{position:absolute;right:-10px;top:18px;transform:rotate(12deg);border:3px solid var(--bad);color:var(--bad);font:400 15px "Archivo Black";padding:4px 10px;border-radius:6px;background:#fff}
+.who{display:flex;gap:14px;align-items:center;margin:6px 0 16px}
+.ava{width:58px;height:58px;border-radius:50%;background:var(--pink-2);border:3px solid var(--ink);display:grid;place-items:center;font:400 22px "Archivo Black"}
+.who b{display:block;font-size:19px}.who small{color:var(--muted);font-weight:700}
+.row{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-top:2px dashed #e6cfd9;font-size:15px}
+.row span:last-child{font-weight:900;text-align:right;font-variant-numeric:tabular-nums}
+.sim{color:var(--ok)}.nao{color:var(--bad)}
+.redact{background:var(--ink);color:var(--ink);border-radius:3px;padding:0 4px;transition:color .3s,background .3s}
+.dossie:hover .redact,.dossie:focus-within .redact{background:var(--pink-2)}
+.note{font-size:12px;color:var(--muted);margin-top:10px}
+/* marquee */
+.tape{background:var(--ink);color:var(--pink);overflow:hidden;white-space:nowrap;font:400 20px "Archivo Black";padding:14px 0;border-bottom:3px solid var(--ink)}
+.tape div{display:inline-block;animation:run 30s linear infinite}
+@keyframes run{to{transform:translateX(-50%)}}
+/* steps */
+.steps{display:grid;gap:0;margin-top:40px;border-top:3px solid var(--ink)}
+.step{display:grid;grid-template-columns:72px 1fr;gap:16px;padding:26px 0;border-bottom:3px solid var(--ink)}
+.step .n{font:400 56px/1 "Archivo Black";color:var(--pink);-webkit-text-stroke:2px var(--ink)}
+.step h3{font-size:clamp(24px,3.4vw,34px);margin-bottom:6px}
+.step p{color:var(--muted);max-width:52ch}
+@media(min-width:900px){.steps{grid-template-columns:repeat(3,1fr);border-top:0}.step{grid-template-columns:1fr;border:0;border-left:3px solid var(--ink);padding:0 24px}.step:first-child{border-left:0;padding-left:0}}
+/* track */
+.track{background:var(--ink);color:#fff}
+.track h2 span{color:var(--pink)}
+.list{margin-top:36px;display:grid;gap:0}
+.item{display:grid;gap:6px;padding:20px 0;border-top:1px solid #3a2a33}
+.item b{font:400 clamp(26px,4vw,40px)/1 "Archivo Black";color:var(--pink)}
+.item p{color:#e9d9e1;max-width:56ch}
+@media(min-width:900px){.list{grid-template-columns:1fr 1fr;column-gap:48px}}
+/* report */
+.report .wrap{display:grid;gap:40px;align-items:center}
+@media(min-width:900px){.report .wrap{grid-template-columns:1fr 1fr}}
+.report p.big{font-size:20px;margin-top:18px;max-width:40ch}
+.mail{background:#fff;border:3px solid var(--ink);border-radius:18px;overflow:hidden;box-shadow:-10px 10px 0 var(--pink)}
+.mail .top{background:var(--pink-2);border-bottom:3px solid var(--ink);padding:12px 16px;font-size:14px}
+.mail .top b{display:block;font-size:16px}
+.mail .body{padding:18px 16px;font-size:15px}
+.mail h3{font-size:26px;margin-bottom:10px}
+.mail ul{padding-left:18px;display:grid;gap:8px;margin:10px 0}
+.mail .tag{display:inline-block;background:var(--ink);color:#fff;font-weight:900;font-size:12px;padding:3px 8px;border-radius:6px}
+/* sources */
+.sources{background:var(--pink-2);border-top:3px solid var(--ink);border-bottom:3px solid var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.chips span{border:3px solid var(--ink);border-radius:999px;padding:10px 16px;font-weight:900;background:#fff}
+.sources p{margin-top:20px;max-width:60ch;font-size:18px}
+/* faq */
+details{border-bottom:3px solid var(--ink);padding:20px 0}
+details:first-of-type{border-top:3px solid var(--ink);margin-top:32px}
+summary{cursor:pointer;font:900 20px Archivo;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::after{content:"+";font:400 26px/1 "Archivo Black";color:var(--pink)}
+details[open] summary::after{content:"–"}
+details p{margin-top:10px;color:var(--muted);max-width:64ch}
+/* form */
+.join{background:var(--pink);border-top:3px solid var(--ink)}
+.join .wrap{display:grid;gap:36px}
+@media(min-width:900px){.join .wrap{grid-template-columns:1fr 1fr;align-items:start}}
+.join p.big{font-size:20px;font-weight:700;margin-top:18px;max-width:36ch}
+form{background:#fff;border:3px solid var(--ink);border-radius:18px;padding:22px;box-shadow:10px 10px 0 var(--ink);display:grid;gap:16px}
+label{font-weight:900;font-size:15px;display:grid;gap:6px}
+label small{font-weight:500;color:var(--muted)}
+input,select,textarea{font:500 17px Archivo,sans-serif;border:2px solid var(--ink);border-radius:12px;padding:14px;background:var(--paper);width:100%;color:var(--ink)}
+textarea{min-height:84px;resize:vertical}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--ink);outline-offset:1px}
+.hp{position:absolute;left:-9999px}
+form .btn{width:100%;background:var(--pink);color:var(--ink)}
+.fine{font-size:13px;color:var(--muted)}
+#msg{font-weight:900}
+#msg.err{color:var(--bad)}
+.done{text-align:center;padding:20px 6px}
+.done h3{font-size:34px;margin-bottom:8px}
+footer{background:var(--ink);color:#e9d9e1;padding:40px 0 calc(40px + env(safe-area-inset-bottom));font-size:14px}
+footer .logo{color:#fff;margin-bottom:10px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Pular para o conteúdo</a>
+<header>
+  <div class="wrap">
+    <a class="logo" href="#" aria-label="Solange, início"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="28" cy="28" r="15" fill="#fff" stroke="#0B1F4D" stroke-width="6"/><path d="M39 39l13 13" stroke="#0B1F4D" stroke-width="8" stroke-linecap="round"/></svg>Solange</a>
+    <a class="btn" href="#lista">Acesso antecipado</a>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <h1><span>Você votou.</span><em>A Solange vigia.</em></h1>
+      <p class="lead">A fiscal política que mostra como seus políticos votam, quanto gastam e o que andam aprontando. Com dados oficiais e sem juridiquês.</p>
+      <div class="ctas">
+        <a class="btn" href="#lista">Quero acesso antecipado</a>
+        <a class="btn alt desk" href="#como">Como funciona</a>
+      </div>
+      <p class="count" id="count" aria-live="polite"></p>
+    </div>
+
+    <article class="dossie" aria-label="Exemplo de ficha de um político">
+      <span class="tab">FICHA Nº 0137</span>
+      <span class="stamp" aria-hidden="true">EXPOSTO</span>
+      <div class="who">
+        <div class="ava" aria-hidden="true">JS</div>
+        <div><b>Dep. João da Silva</b><small>Deputado federal · SP</small></div>
+      </div>
+      <div class="row"><span>PL do aumento da cota</span><span class="sim">Votou SIM</span></div>
+      <div class="row"><span>PEC da transparência</span><span class="nao">Faltou</span></div>
+      <div class="row"><span>Gasto da cota este mês</span><span>R$&nbsp;41.870</span></div>
+      <div class="row"><span>Maior despesa</span><span><span class="redact">Locação de jatinho</span></span></div>
+      <div class="row"><span>Presença em votações</span><span>62%</span></div>
+      <p class="note">Ficha ilustrativa. Político fictício.</p>
+    </article>
+  </div>
+</section>
+
+<div class="tape" aria-hidden="true"><div>QUEM VOTOU O QUÊ ✦ QUANTO GASTOU ✦ ONDE FALTOU ✦ O QUE PROMETEU ✦ O QUE CUMPRIU ✦ QUEM VOTOU O QUÊ ✦ QUANTO GASTOU ✦ ONDE FALTOU ✦ O QUE PROMETEU ✦ O QUE CUMPRIU ✦&nbsp;</div></div>
+
+<section id="como">
+  <div class="wrap">
+    <h2>Fiscalizar ficou fácil.</h2>
+    <div class="steps">
+      <div class="step"><span class="n">1</span><div><h3>Escolha quem vigiar</h3><p>Busque pelo nome os deputados, senadores e outros políticos em quem você votou ou que quer ficar de olho.</p></div></div>
+      <div class="step"><span class="n">2</span><div><h3>A Solange investiga</h3><p>Ela cruza votações, presença e gastos direto das bases oficiais do governo. Sem achismo, sem fake news.</p></div></div>
+      <div class="step"><span class="n">3</span><div><h3>Você fica sabendo</h3><p>Uma ficha simples no celular e um relatório no seu e-mail todo mês. Leitura de 3 minutos, no máximo.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="track">
+  <div class="wrap">
+    <h2>O que a Solange <span>põe na mesa.</span></h2>
+    <div class="list">
+      <div class="item"><b>Votos</b><p>Como seu político votou em cada projeto importante, e quando ele simplesmente não apareceu.</p></div>
+      <div class="item"><b>Gastos</b><p>Cota parlamentar, viagens, assessores e despesas, com as notas fiscais que estão no portal público.</p></div>
+      <div class="item"><b>Presença</b><p>Quantas sessões ele foi e quantas ele furou. Simples assim.</p></div>
+      <div class="item"><b>Projetos</b><p>O que ele propôs, o que andou e o que ficou parado na gaveta.</p></div>
+      <div class="item"><b>Justiça</b><p>Processos e decisões relevantes no STF e em outros tribunais, quando houver.</p></div>
+      <div class="item"><b>Notícias</b><p>O que saiu na imprensa sobre ele no mês, num resumo só, sem você caçar manchete.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="report">
+  <div class="wrap">
+    <div>
+      <h2>Todo mês, o relatório chega em você.</h2>
+      <p class="big">Nada de ficar entrando em portal do governo. A Solange manda no seu e-mail o resumo do mês de cada político que você acompanha: o que votou, quanto gastou e o que deu o que falar.</p>
+    </div>
+    <div class="mail" aria-label="Exemplo de relatório mensal">
+      <div class="top"><b>Solange, a fiscal política</b>Assunto: Seu relatório de outubro chegou 🔎</div>
+      <div class="body">
+        <span class="tag">RESUMO DO MÊS</span>
+        <h3>Teu deputado votou 14 vezes. Faltou em 5.</h3>
+        <ul>
+          <li>Votou <b>SIM</b> no projeto que muda as regras da cota.</li>
+          <li>Gastou <b>R$&nbsp;41.870</b>, 23% acima da média da bancada.</li>
+          <li>Apareceu em <b>3 notícias</b>. A gente resumiu pra você.</li>
+        </ul>
+        <p class="fine">Exemplo ilustrativo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sources">
+  <div class="wrap">
+    <h2>Fonte? Oficial.</h2>
+    <div class="chips"><span>Câmara dos Deputados</span><span>Senado Federal</span><span>STF</span><span>Portal da Transparência</span><span>TSE</span></div>
+    <p>A Solange usa dados abertos e públicos do próprio governo. Ela não toma partido: mostra os fatos, com o link da fonte, e quem decide é você.</p>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2>Perguntas rápidas.</h2>
+    <details><summary>Quanto custa?</summary><p>Quem se cadastra agora recebe acesso antecipado e gratuito antes do lançamento oficial.</p></details>
+    <details><summary>A Solange é de esquerda ou de direita?</summary><p>Nenhum dos dois. Ela fiscaliza todo mundo do mesmo jeito, com os mesmos dados oficiais. Político bom ou ruim, quem julga é você.</p></details>
+    <details><summary>De onde vêm os dados?</summary><p>Das bases públicas da Câmara, do Senado, do STF, do TSE e do Portal da Transparência. Toda informação vem com o link da fonte.</p></details>
+    <details><summary>Quais políticos dá pra acompanhar?</summary><p>No lançamento, deputados federais e senadores. Depois vêm governadores, deputados estaduais, prefeitos e vereadores.</p></details>
+    <details><summary>Vai ter aplicativo?</summary><p>Vai. A Solange começa no site, feito pra celular, e depois ganha app pra Android e iPhone.</p></details>
+    <details><summary>Vocês vão encher meu e-mail?</summary><p>Não. É um relatório por mês e um aviso quando a Solange for lançada. Dá pra sair quando quiser.</p></details>
+  </div>
+</section>
+
+<section class="join" id="lista">
+  <div class="wrap">
+    <div>
+      <h2>Receba acesso antecipado.</h2>
+      <p class="big">Seja dos primeiros a usar a Solange. Deixa seu e-mail e WhatsApp e a gente te avisa assim que abrir.</p>
+    </div>
+    <form id="form" novalidate>
+      <label>Seu e-mail<input name="email" type="email" inputmode="email" autocomplete="email" spellcheck="false" placeholder="maria@email.com…" required maxlength="200"></label>
+      <label>Seu WhatsApp<input name="phone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="(11) 91234-5678…" required minlength="14" maxlength="15"></label>
+      <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn" type="submit">Quero acesso antecipado</button>
+      <p id="msg" aria-live="polite"></p>
+      <p class="fine">Usamos seus dados só para falar da Solange. Nada de spam, nada de venda de dados.</p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="logo">Solange · a fiscal política</div>
+    <p>Dados públicos, linguagem de gente. Feito no Brasil. © 2026</p>
+  </div>
+</footer>
+
+<script>
+const ph=document.querySelector("input[name=phone]");ph.addEventListener("input",()=>{const d=ph.value.replace(/\D/g,"").slice(0,11);ph.value=d.length>10?`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`:d.length>6?`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`:d.length>2?`(${d.slice(0,2)}) ${d.slice(2)}`:d.length?`(${d}`:""});
+fetch("/api/count").then(r=>r.json()).then(d=>{if(d.count>=20)document.getElementById("count").textContent=d.count.toLocaleString("pt-BR")+" pessoas já estão na lista."}).catch(()=>{});
+const f=document.getElementById("form"),msg=document.getElementById("msg");
+f.addEventListener("submit",async e=>{
+  e.preventDefault();msg.className="";msg.textContent="";
+  for(const el of [f.email,f.phone]) if(!el.checkValidity()){msg.className="err";msg.textContent=el===f.email?"Esse e-mail parece estranho. Confere?":"Coloca seu WhatsApp com DDD: (11) 91234-5678.";el.focus();return}
+  const b=f.querySelector("button");b.disabled=true;b.textContent="Enviando…";
+  try{
+    const r=await fetch("/api/signup",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.fromEntries(new FormData(f)))});
+    const d=await r.json();if(!r.ok)throw new Error(d.error);
+    f.innerHTML='<div class="done"><h3>Tá dentro! 🔎</h3><p>A Solange anotou. Você vai receber o acesso antecipado no seu e-mail.</p></div>';
+  }catch(err){msg.className="err";msg.textContent=err.message||"Deu ruim. Tenta de novo?";b.disabled=false;b.textContent="Quero acesso antecipado"}
+});
+</script>
+</body>
+</html>
